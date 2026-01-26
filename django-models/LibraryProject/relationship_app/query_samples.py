@@ -1,15 +1,47 @@
+# relationship_app/query_samples.py
+
 from relationship_app.models import Author, Book, Library, Librarian
 
-# Query all books by a specific author
-author = Author.objects.get(name="George Orwell")
+# ------------------------------
+# Sample Data Setup (if not already created)
+# ------------------------------
+# Note: Only run once, or you may get duplicates
+if not Author.objects.filter(name="George Orwell").exists():
+    author = Author.objects.create(name="George Orwell")
+else:
+    author = Author.objects.get(name="George Orwell")
+
+if not Book.objects.filter(title="1984").exists():
+    book = Book.objects.create(title="1984", author=author)
+else:
+    book = Book.objects.get(title="1984")
+
+if not Library.objects.filter(name="Central Library").exists():
+    library = Library.objects.create(name="Central Library")
+    library.books.add(book)
+else:
+    library = Library.objects.get(name="Central Library")
+
+if not hasattr(library, 'librarian'):
+    librarian = Librarian.objects.create(name="Alice", library=library)
+else:
+    librarian = library.librarian
+
+# ------------------------------
+# Queries
+# ------------------------------
+
+# 1️⃣ Query all books by a specific author
+print("\nBooks by George Orwell:")
 books_by_author = author.books.all()
-print("Books by George Orwell:", list(books_by_author))
+for b in books_by_author:
+    print(f"- {b.title}")
 
-# List all books in a library
-library = Library.objects.get(name="Central Library")
+# 2️⃣ List all books in a library
+print(f"\nBooks in {library.name}:")
 library_books = library.books.all()
-print("Books in Central Library:", list(library_books))
+for b in library_books:
+    print(f"- {b.title}")
 
-# Retrieve the librarian for a library
-librarian = library.librarian
-print("Librarian of Central Library:", librarian.name)
+# 3️⃣ Retrieve the librarian for a library
+print(f"\nLibrarian for {library.name}: {library.librarian.name}")
