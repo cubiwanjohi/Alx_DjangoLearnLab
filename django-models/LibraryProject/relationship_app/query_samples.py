@@ -1,11 +1,5 @@
-# relationship_app/query_samples.py
-
 from relationship_app.models import Author, Book, Library, Librarian
 
-# ------------------------------
-# Sample Data Setup (if not already created)
-# ------------------------------
-# Note: Only run once, or you may get duplicates
 if not Author.objects.filter(name="George Orwell").exists():
     author = Author.objects.create(name="George Orwell")
 else:
