@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.detail import DetailView
-from django.contrib.auth.decorators import user_passes_test, permission_required
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 from .models import Book
 from .models import Library
 
-# --- Existing Views ---
+# --- Book & Library Views ---
 
 def list_books(request):
     books = Book.objects.all()
@@ -16,6 +17,8 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = 'library'
+
+# --- User Authentication Views ---
 
 def register(request):
     if request.method == 'POST':
@@ -28,7 +31,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# --- Role-Based Access Control ---
+# --- Role-Based Access Control Views ---
 
 def is_admin(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
@@ -51,14 +54,12 @@ def librarian_view(request):
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
-# --- Custom Permissions for Books (NEW) ---
-
-
+# --- Custom Permissions for Books ---
 
 @permission_required('relationship_app.can_add_book')
 def add_book(request):
     if request.method == 'POST':
-        # Logic to add a book would go here
+        # logic for adding a book
         return redirect('list_books')
     return render(request, 'relationship_app/add_book.html')
 
@@ -66,7 +67,7 @@ def add_book(request):
 def edit_book(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
-        # Logic to edit a book would go here
+        # logic for editing a book
         return redirect('list_books')
     return render(request, 'relationship_app/edit_book.html', {'book': book})
 
