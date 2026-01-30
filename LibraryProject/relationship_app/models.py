@@ -1,14 +1,22 @@
 from django.db import models
+from django.conf import settings  # Required to reference the Custom User Model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
+# Basic Library Models ---
 class Author(models.Model):
     name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
+    def __str__(self): return self.name
 
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+    class Meta:
+        permissions = [
+            ("can_add_book", "Can add book"),
+            ("can_change_book", "Can change book"),
+            ("can_delete_book", "Can delete book"),
+        ]
 
     def __str__(self):
         return self.title
@@ -16,13 +24,35 @@ class Book(models.Model):
 class Library(models.Model):
     name = models.CharField(max_length=200)
     books = models.ManyToManyField(Book, related_name='libraries')
-
-    def __str__(self):
-        return self.name
+    def __str__(self): return self.name
 
 class Librarian(models.Model):
     name = models.CharField(max_length=100)
     library = models.OneToOneField(Library, on_delete=models.CASCADE, related_name='librarian')
+    def __str__(self): return self.name
+
+# --- Step 5: Update Role-Based Access Models to use Custom User ---
+class UserProfile(models.Model):
+    ROLE_CHOICES = [
+        ('Admin', 'Admin'),
+        ('Librarian', 'Librarian'),
+        ('Member', 'Member'),
+    ]
+    # Point the relationship to settings.AUTH_USER_MODEL
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='Member')
 
     def __str__(self):
-        return self.name
+        return f"{self.user.username} - {self.role}"
+
+# Update signals to use settings.AUTH_USER_MODEL as the sender
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.get_or_create(user=instance)
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def save_user_profile(sender, instance, **kwargs):
+    # Use hasattr to prevent errors if the profile wasn't created
+    if hasattr(instance, 'userprofile'):
+        instance.userprofile.save()

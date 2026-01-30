@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -122,3 +124,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# Redirect to the book list after a successful login
+LOGIN_REDIRECT_URL = 'list_books'
+
+# Redirect to the login page after logging out
+LOGOUT_REDIRECT_URL = 'login'
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = 'static/'
+
+# Media files (User uploaded content like profile photos)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Settings to Use the Custom User Model
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
