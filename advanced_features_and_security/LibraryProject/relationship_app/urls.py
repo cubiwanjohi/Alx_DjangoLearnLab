@@ -3,8 +3,10 @@ from . import views
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
-    # Book and Library paths
-    path('books/', views.list_books, name='list_books'),
+    # Updated path to match the view name 'book_list'
+    path('books/', views.book_list, name='book_list'), 
+    
+    # Keeping your other paths
     path('library/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),
 
     # Authentication paths
@@ -17,7 +19,7 @@ urlpatterns = [
     path('librarian_view/', views.librarian_view, name='librarian_view'),
     path('member_view/', views.member_view, name='member_view'),
 
-    # Custom Permission paths - REQUIRED for the current task:
+    # Custom Permission paths
     path('add_book/', views.add_book, name='add_book'),
     path('edit_book/<int:pk>/', views.edit_book, name='edit_book'),
     path('delete_book/<int:pk>/', views.delete_book, name='delete_book'),
