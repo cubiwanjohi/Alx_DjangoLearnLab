@@ -139,3 +139,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Settings to Use the Custom User Model
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+# --- Security Settings ---
+
+# 1. Disable Debug in production 
+DEBUG = False
+
+# 2. Browser-side protections against XSS and Sniffing
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# 3. Cookie Security (Ensures cookies only travel over HTTPS)
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
