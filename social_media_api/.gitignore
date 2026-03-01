@@ -1,25 +1,25 @@
 # Python bytecode
-# Virtual Environment
-env/
-.venv/
-# Python cache / compiled files
 __pycache__/
 *.py[cod]
 *$py.class
+
 # Virtual environment
 venv/
 env/
 *.venv
+
 # Django stuff:
 *.sqlite3
 *.log
 *.pot
 *.pyc
+
 # Migrations
 */migrations/*.pyc
 */migrations/__pycache__/
 */migrations/*.py[cod]
 */migrations/*.sql
+
 # IDEs and editors
 .vscode/
 .idea/
@@ -32,27 +32,3 @@ Thumbs.db
 
 # Pytest cache
 .pytest_cache/
-# Django stuff
-*.log
-db.sqlite3
-media/
-
-# Django migrations cache (keep migrations themselves!)
-**/migrations/__pycache__/
-
-# Environment variables
-.env
-.env.*
-
-# Static files (optional, if collected)
-staticfiles/
-
-# IDE / Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS files
-.DS_Store
-Thumbs.db
