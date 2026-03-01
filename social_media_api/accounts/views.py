@@ -8,10 +8,8 @@ from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
 
 User = get_user_model()
 
-
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
-
 
 class LoginView(generics.GenericAPIView):
     serializer_class = LoginSerializer
@@ -30,7 +28,6 @@ class LoginView(generics.GenericAPIView):
                 "username": user.username
             })
         return Response({"error": "Invalid Credentials"}, status=status.HTTP_400_BAD_REQUEST)
-
 
 class ProfileView(generics.RetrieveAPIView):
     serializer_class = ProfileSerializer
