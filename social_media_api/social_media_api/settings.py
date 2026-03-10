@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     'posts',
     'django_filters',
     'notifications',
-
 ]
 
 MIDDLEWARE = [
