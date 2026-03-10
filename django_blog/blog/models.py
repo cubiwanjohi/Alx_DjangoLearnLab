@@ -2,6 +2,17 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+
+# -----------------------
+# TAG MODEL
+# -----------------------
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 # -----------------------
 # BLOG POST MODEL
 # -----------------------
@@ -11,12 +22,16 @@ class Post(models.Model):
     published_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
 
+    # MANY-TO-MANY RELATIONSHIP WITH TAGS
+    tags = models.ManyToManyField(Tag, blank=True, related_name="posts")
+
     def __str__(self):
         return self.title
 
-    # For Django's generic views to redirect after create/update/delete
+    # Redirect after create/update/delete
     def get_absolute_url(self):
         return reverse('blog:post_detail', kwargs={'pk': self.pk})
+
 
 # -----------------------
 # COMMENT MODEL
@@ -29,10 +44,10 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['created_at']  # Show oldest comments first
+        ordering = ['created_at']  # Oldest comments first
 
     def __str__(self):
         return f'Comment by {self.author.username} on "{self.post.title}"'
 
     def get_absolute_url(self):
-        return self.post.get_absolute_url()  # Redirect to post detail after comment actions
+        return self.post.get_absolute_url()
