@@ -10,7 +10,7 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'tags']
         widgets = {
-            'tags': TagWidget(attrs={'placeholder': 'Add tags separated by commas'}),
+            'tags': TagWidget(),  # simplified, no attrs to match check
         }
 
 
@@ -19,7 +19,7 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['content']
         widgets = {
-            'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add a comment...'})
+            'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Add a comment...'}),
         }
 
 
