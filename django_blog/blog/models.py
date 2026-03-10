@@ -1,16 +1,9 @@
+# blog/models.py
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-
-
-# -----------------------
-# TAG MODEL
-# -----------------------
-class Tag(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.name
+from taggit.managers import TaggableManager
 
 
 # -----------------------
@@ -22,8 +15,8 @@ class Post(models.Model):
     published_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
 
-    # MANY-TO-MANY RELATIONSHIP WITH TAGS
-    tags = models.ManyToManyField(Tag, blank=True, related_name="posts")
+    # Tags using django-taggit
+    tags = TaggableManager(blank=True)
 
     def __str__(self):
         return self.title
@@ -44,7 +37,7 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['created_at']  # Oldest comments first
+        ordering = ['created_at']  # Oldest first
 
     def __str__(self):
         return f'Comment by {self.author.username} on "{self.post.title}"'
